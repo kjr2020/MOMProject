@@ -1,5 +1,6 @@
 package org.idpl.mju.mykafkaconsumer;
 
+import java.io.PrintWriter;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
@@ -21,6 +22,9 @@ public class MyConsumer {
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		
+		//Text file : File for check Consumer's running time.
+		PrintWriter pw = new PrintWriter("ConsumerResult" + args[0] + ".txt");
+		
 		int partitionNum = Integer.parseInt(args[0]);
 		
 		long executeTime = System.currentTimeMillis();
@@ -34,20 +38,23 @@ public class MyConsumer {
 		consumer.assign(Arrays.asList(partition));
 		consumer.seek(partition, 0);
 		
-		
+		long consumerStartTime = System.currentTimeMillis();
 		try {
 			while (executeTime < executable) {
 				ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
 				
-				//Parse String to Long and sleep Thread It i
+				//Parse String to Long and sleep Thread
 				for (ConsumerRecord<String, String> record : records) {
 					System.out.printf("Value : %s, Offset : %d\n", record.value(), record.offset());
-					Thread.sleep(Long.parseLong(record.value()) * 5);
+					Thread.sleep(Long.parseLong(record.value()));
 					executable = System.currentTimeMillis() + 10000;
 					System.out.println("executeTime is " + executeTime + " executable is " + executable);
 				}
+				//Wait for not arrived task in 10sec
 				executeTime = System.currentTimeMillis();
 				try {
+					
+					//Commit consumer's offset
 					consumer.commitSync();
 				}catch (Exception e) {
 					e.printStackTrace();
@@ -56,11 +63,14 @@ public class MyConsumer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			pw.println("Consumer" + args[0] + " Execution Time : " + 
+						(System.currentTimeMillis() - consumerStartTime));
+			pw.close();
 			consumer.close();
 			System.out.println("Consumer is Closed..");
 		}
-		consumer.close();
-		System.out.println("Consumer is Closed..");
+//		consumer.close();
+//		System.out.println("Consumer is Closed..");
 	}
 
 }
