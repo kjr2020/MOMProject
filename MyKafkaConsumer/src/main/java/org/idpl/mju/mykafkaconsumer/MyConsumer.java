@@ -16,14 +16,14 @@ public class MyConsumer {
 		// TODO Auto-generated method stub
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "master:9092");
-		props.put("group.id", "test-consumer");
+		props.put("group.id", "idpl-consumer");
 		props.put("enable.auto.commit", "false");
 		props.put("auto.offset.reset", "latest");
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		
 		//Text file : File for check Consumer's running time.
-		PrintWriter pw = new PrintWriter("ConsumerResult" + args[0] + ".txt");
+		PrintWriter pw = new PrintWriter("ConsumerResult-" + args[0] + ".txt");
 		
 		int partitionNum = Integer.parseInt(args[0]);
 		
@@ -34,7 +34,7 @@ public class MyConsumer {
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
 		
 		//Connect partition to Kafka Consumer
-		TopicPartition partition = new TopicPartition("test-topic2", partitionNum);
+		TopicPartition partition = new TopicPartition("idpl-topic", partitionNum);
 		consumer.assign(Arrays.asList(partition));
 		consumer.seek(partition, 0);
 		
@@ -48,7 +48,6 @@ public class MyConsumer {
 					System.out.printf("Value : %s, Offset : %d\n", record.value(), record.offset());
 					Thread.sleep(Long.parseLong(record.value()));
 					executable = System.currentTimeMillis() + 10000;
-					System.out.println("executeTime is " + executeTime + " executable is " + executable);
 				}
 				//Wait for not arrived task in 10sec
 				executeTime = System.currentTimeMillis();

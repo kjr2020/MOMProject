@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.idpl.mju</groupId>
-	<artifactId>MyKafkaConsumerP0</artifactId>
+	<artifactId>IdplKafkaConsumer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>mykafkaconsumer</name>
