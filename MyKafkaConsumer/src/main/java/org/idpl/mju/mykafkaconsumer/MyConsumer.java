@@ -20,25 +20,30 @@ public class MyConsumer {
 		props.put("auto.offset.reset", "latest");
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-
+		
+		int partitionNum = Integer.parseInt(args[0]);
+		
 		long executeTime = System.currentTimeMillis();
 		long executable = executeTime + 10000;
-		long sleepTime = 0;
+
+		//Create Kafka Consumer
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-		TopicPartition partition = new TopicPartition("test-topic2", 0);
+		
+		//Connect partition to Kafka Consumer
+		TopicPartition partition = new TopicPartition("test-topic2", partitionNum);
 		consumer.assign(Arrays.asList(partition));
 		consumer.seek(partition, 0);
 		
-		//Thread.sleep(10000);
 		
 		try {
 			while (executeTime < executable) {
 				ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
 				
+				//Parse String to Long and sleep Thread It i
 				for (ConsumerRecord<String, String> record : records) {
 					System.out.printf("Value : %s, Offset : %d\n", record.value(), record.offset());
 					Thread.sleep(Long.parseLong(record.value()) * 5);
-					executable = executeTime + 10000;
+					executable = System.currentTimeMillis() + 10000;
 					System.out.println("executeTime is " + executeTime + " executable is " + executable);
 				}
 				executeTime = System.currentTimeMillis();
