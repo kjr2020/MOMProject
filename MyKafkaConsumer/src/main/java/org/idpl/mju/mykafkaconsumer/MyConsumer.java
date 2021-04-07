@@ -46,7 +46,7 @@ public class MyConsumer {
 				//Parse String to Long and sleep Thread
 				for (ConsumerRecord<String, String> record : records) {
 					System.out.printf("Value : %s, Offset : %d\n", record.value(), record.offset());
-					Thread.sleep(Long.parseLong(record.value()));
+					Thread.sleep(Long.parseLong(record.value()) * 1000);
 					executable = System.currentTimeMillis() + 10000;
 				}
 				//Wait for not arrived task in 10sec
@@ -63,7 +63,7 @@ public class MyConsumer {
 			e.printStackTrace();
 		} finally {
 			pw.println("Consumer" + args[0] + " Execution Time : " + 
-						(System.currentTimeMillis() - consumerStartTime));
+						((System.currentTimeMillis() - consumerStartTime)/1000));
 			pw.close();
 			consumer.close();
 			System.out.println("Consumer is Closed..");
