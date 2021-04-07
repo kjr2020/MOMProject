@@ -20,15 +20,15 @@ public class MyProducer {
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		
-		//Text file : This file for Producer's running time
+		//Text file : File for check Producer's running time.
 		PrintWriter pw = new PrintWriter("ProducerResult.txt");
 		String line = null;
 		
 		//Text file : This file has Integers that become sleep task
 		BufferedReader br = new BufferedReader(new FileReader("sleeptask.txt"));
         
-		//Producer's start time : write in file
-		pw.println("Producer Start : " + System.currentTimeMillis());
+		//Producer's start time
+		long producerStartTime = System.currentTimeMillis();
 		
 		//Create kafka Producer
 		Producer<String, String> producer = new KafkaProducer<>(props);
@@ -36,12 +36,12 @@ public class MyProducer {
 		//Read sleeptask.txt and Producing to kafka queue
 		line=br.readLine();
 		while(line !=null){
-			producer.send(new ProducerRecord<String, String>("test-topic2",	line));
+			producer.send(new ProducerRecord<String, String>("idpl-topic", line));
 			line=br.readLine();
 		}
 		
 		//Write Producer End time in ProducerResult.txt file
-		pw.println("Producer End : " + System.currentTimeMillis());
+		pw.println("Producer ExecutionTime : " + (System.currentTimeMillis() - producerStartTime));
 		
 		//close all files and kafkaProducer
 		br.close();
