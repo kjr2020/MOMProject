@@ -68,8 +68,6 @@ public class MyConsumer {
 			consumer.close();
 			System.out.println("Consumer is Closed..");
 		}
-//		consumer.close();
-//		System.out.println("Consumer is Closed..");
 	}
 
 }
