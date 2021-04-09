@@ -19,6 +19,7 @@ public class MyProducer {
 		props.put("bootstrap.servers", "master:9092");
 		props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 		props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		props.put("batch.size", "4");
 		
 		//Text file : File for check Producer's running time.
 		PrintWriter pw = new PrintWriter("ProducerResult.txt");
