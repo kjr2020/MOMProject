@@ -17,13 +17,10 @@ public class MyConsumer {
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "master:9092");
 		props.put("group.id", "idpl-consumer");
-		props.put("enable.auto.commit", "false");
+		props.put("enable.auto.commit", "true");
 		props.put("auto.offset.reset", "latest");
 		props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 		props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-		
-		//Text file : File for check Consumer's running time.
-		PrintWriter pw = new PrintWriter("ConsumerResult-" + args[0] + ".txt");
 		
 		int partitionNum = Integer.parseInt(args[0]);
 		
@@ -51,17 +48,19 @@ public class MyConsumer {
 				}
 				//Wait for not arrived task in 10sec
 				executeTime = System.currentTimeMillis();
-				try {
-					
-					//Commit consumer's offset
-					consumer.commitSync();
-				}catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					
+//					//Commit consumer's offset
+//					consumer.commitSync();
+//				}catch (Exception e) {
+//					e.printStackTrace();
+//				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			//Text file : File for check Consumer's running time.
+			PrintWriter pw = new PrintWriter("ConsumerResult-" + args[0] + ".txt");
 			pw.println("Consumer" + args[0] + " Execution Time : " + 
 						((System.currentTimeMillis() - consumerStartTime)/1000));
 			pw.close();
