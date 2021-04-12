@@ -10,20 +10,23 @@ import com.rabbitmq.client.ConnectionFactory;
 
 public class RabbitSend {
 
-	private static final String TASK_QUEUE_NAME = "sleep_queue";
-
 	public static void main(String[] argv) throws Exception {
 		ConnectionFactory factory = new ConnectionFactory();
-		factory.setUri("amqp://rabbitmq:1234@117.17.158.60:5672/rHost");
+		factory.setUsername("master");
+		factory.setPassword("1234");
+		factory.setVirtualHost("/");
+		factory.setHost("master");
+		factory.setPort(5672);
 		BufferedReader br = new BufferedReader(new FileReader("sleeptask.txt"));
 
 		String line = br.readLine();
 		long startTime = System.currentTimeMillis();
-		try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
-			channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
+		try (Connection connection = factory.newConnection();
+				Channel channel = connection.createChannel()) {
+			channel.queueDeclare("idpl-queue", true, false, false, null);
 
 			while (line != null) {
-				channel.basicPublish("", TASK_QUEUE_NAME, null, line.getBytes("UTF-8"));
+				channel.basicPublish("", "idpl-queue", null, line.getBytes("UTF-8"));
 				line = br.readLine();
 			}
 			PrintWriter pw = new PrintWriter("RabbitProducerResult.txt");

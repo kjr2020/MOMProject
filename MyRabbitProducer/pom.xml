@@ -94,7 +94,7 @@
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<mainClass>org.idpl.mju.mykafkaconsumer.MyConsumer</mainClass>
+							<mainClass>kr.ac.mju.idpl.MyRabbitProducer.RabbitSend</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
