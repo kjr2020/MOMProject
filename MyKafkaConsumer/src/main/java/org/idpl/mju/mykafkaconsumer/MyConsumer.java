@@ -38,7 +38,7 @@ public class MyConsumer {
 		long consumerStartTime = System.currentTimeMillis();
 		try {
 			while (executeTime < executable) {
-				ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+				ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(10000));
 				
 				//Parse String to Long and sleep Thread
 				for (ConsumerRecord<String, String> record : records) {
@@ -48,19 +48,12 @@ public class MyConsumer {
 				}
 				//Wait for not arrived task in 10sec
 				executeTime = System.currentTimeMillis();
-//				try {
-//					
-//					//Commit consumer's offset
-//					consumer.commitSync();
-//				}catch (Exception e) {
-//					e.printStackTrace();
-//				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			//Text file : File for check Consumer's running time.
-			PrintWriter pw = new PrintWriter("ConsumerResult-" + args[0] + ".txt");
+			PrintWriter pw = new PrintWriter("ConsumerResult-" + args[0]);
 			pw.println("Consumer" + args[0] + " Execution Time : " + 
 						((System.currentTimeMillis() - consumerStartTime)/1000));
 			pw.close();
