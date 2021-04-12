@@ -22,11 +22,11 @@ public class MyProducer {
 		props.put("batch.size", "4");
 		
 		//Text file : File for check Producer's running time.
-		PrintWriter pw = new PrintWriter("ProducerResult.txt");
+		PrintWriter pw = new PrintWriter("ProducerResult");
 		String line = null;
 		
 		//Text file : This file has Integers that become sleep task
-		BufferedReader br = new BufferedReader(new FileReader("sleeptask.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("sleeptask"));
         
 		//Producer's start time
 		long producerStartTime = System.currentTimeMillis();
