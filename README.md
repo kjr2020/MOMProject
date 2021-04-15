@@ -11,8 +11,11 @@ Then, We have 10 executors and 1 producer.
 
 Producer get tasks in 'sleeptask' file and Producing them in Queue or Topic.
 
-Consumer get those tasks to Queue or Topic and execute BBB and when all tasks consumed It will be closed there connections
+Consumer get those tasks to Queue or Topic and wait in as much as task's value and when all tasks consumed It will be closed there connections
 
 I want to compare to three MOM's(RabbitMQ, Kafka, ActiveMQ) Producer's execute time, Consumer's execute time and Load Balancing.
 
 It will be alert that which MOM is best option for MTC in Distribute Computing.
+
+I provide two version of codes Java and Python but, I think ActiveMQ in Python using STOMP is unstable and occurred some problems in performance
+Then I didn't provide
