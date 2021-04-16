@@ -41,7 +41,7 @@ public class RabbitRecv {
 
 		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
-		pw.println("Consumer-" + argv[0] + " Start Time : " + System.currentTimeMillis());
+		pw.println("Consumer-" + argv[0] + " Start Time : " + (System.currentTimeMillis()/1000));
 		// channel.basicConsume("idpl-queue", true, deliverCallback, consumerTag -> {
 		// });
 		channel.basicConsume(QUEUE_NAME, false, "consumerTag", new DefaultConsumer(channel) {
@@ -65,7 +65,7 @@ public class RabbitRecv {
 				channel.basicAck(deliveryTag, false);
 				
 				if (channel.messageCount(QUEUE_NAME) == 0) {
-						pw.println("Consumer-" + argv[0] + " End Time : " + System.currentTimeMillis());
+						pw.println("Consumer-" + argv[0] + " End Time : " + (System.currentTimeMillis()/1000));
 						pw.println("Task Count : " + taskCount);
 						pw.close();
 						connection.close();
