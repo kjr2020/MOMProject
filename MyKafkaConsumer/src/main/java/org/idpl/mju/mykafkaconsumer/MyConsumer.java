@@ -11,14 +11,14 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
 
 public class MyConsumer {
-	static final String BOOTSTRAP_SERVER = "master:9092";
+	static final String BOOTSTRAP_SERVER = "master:9092,slave1:9092,slave2:9092";
 	static final String TOPIC_NAME = "idpl-topic";
 	static final String GROUP_ID = "idpl-consumer";
 	static final String ENABLE_AUTO_COMMIT = "true";
 	static final String AUTO_OFFSET_RESET = "latest";
 	static final String KEY_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
 	static final String VALUE_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
-	static final String RESULT_FILE_NAME = "KafkaResult/KafkaConsumer-";
+	static final String RESULT_FILE_NAME = "/home/hjlee/DispatchingPerformance/Kafka/Consumer-";
 	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
@@ -29,6 +29,7 @@ public class MyConsumer {
 		props.put("auto.offset.reset", AUTO_OFFSET_RESET);
 		props.put("key.deserializer", KEY_DESERIALIZER);
 		props.put("value.deserializer", VALUE_DESERIALIZER);
+		props.put("fetch.min.bytes", 80);
 
 		int partitionNum = Integer.parseInt(args[0]);
 
@@ -54,7 +55,6 @@ public class MyConsumer {
 				// Parse String to Long and sleep Thread
 				for (ConsumerRecord<String, String> record : records) {
 					System.out.printf("Value : %s, Offset : %d\n", record.value(), record.offset());
-					Thread.sleep(Long.parseLong(record.value()) * 1000);
 					executable = System.currentTimeMillis() + 10000;
 				}
 				// Wait for not arrived task in 10sec

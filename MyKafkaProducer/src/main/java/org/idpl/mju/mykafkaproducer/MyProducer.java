@@ -11,13 +11,15 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class MyProducer {
 
-	static final String BOOTSTRAP_SERVER = "master:9092";
+	static final String BOOTSTRAP_SERVER = "master:9092,slave1:9092,slave2:9092";
 	static final String TOPIC_NAME = "idpl-topic";
-	static final String WORKLOAD_FILE_NAME = "sleeptask";
+	static final String WORKLOAD_FILE_NAME = "/home/hjlee/DispatchingPerformance/zeroTask";
 	static final String KEY_SERIALIZER = "org.apache.kafka.common.serialization.StringSerializer";
 	static final String VALUE_SERIALIZER = "org.apache.kafka.common.serialization.StringSerializer";
-	static final String BATCH_SIZE = "4";
-	static final String RESULT_FILE_NAME = "KafkaResult/KafkaProducer";
+	static final String BATCH_SIZE = "8";
+	static final String RESULT_FILE_NAME = "/home/hjlee/DispatchingPerformance/Kafka/Producer";
+	
+	static final int MAX_SIZE = 10000000;
 	
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
@@ -30,12 +32,12 @@ public class MyProducer {
 		props.put("batch.size", BATCH_SIZE);
 		
 		//Text file : File for check Producer's running time.
-		PrintWriter pw = new PrintWriter(RESULT_FILE_NAME);
+		PrintWriter pw = new PrintWriter(RESULT_FILE_NAME); 
 		String line = null;
 		
 		//Text file : This file has Integers that become sleep task
 		BufferedReader br = new BufferedReader(new FileReader(WORKLOAD_FILE_NAME));
-        
+		
 		//Producer's start time
 		long producerStartTime = System.currentTimeMillis();
 		
@@ -44,9 +46,9 @@ public class MyProducer {
 		
 		//Read sleeptask.txt and Producing to kafka queue
 		line=br.readLine();
-		while(line !=null){
+		for(int i = 0 ; i < MAX_SIZE ; i++) {
 			producer.send(new ProducerRecord<String, String>(TOPIC_NAME, line));
-			line=br.readLine();
+			System.out.println("Offsets : " + i + "published..");
 		}
 		
 		//Write Producer End time in ProducerResult.txt file
